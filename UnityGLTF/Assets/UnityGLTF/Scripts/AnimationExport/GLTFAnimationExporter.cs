@@ -43,6 +43,7 @@ namespace UnityGLTF {
 		private readonly Dictionary<int, int> _exportedTransforms = new Dictionary<int, int>();
 
 		private GLTFRoot _root;
+		private GLTFSceneExporter _exporter;
 
 		public int Length { get { return _animationNodes.Count; } }
 
@@ -54,13 +55,14 @@ namespace UnityGLTF {
 			_exportedTransforms.Add(node.GetInstanceID(), _root.Nodes.Count);
 		}
 
-		public void ExportAnimations(GLTFRoot _rootNode) {
+		public void ExportAnimations(GLTFRoot _rootNode, GLTFSceneExporter _exporter) {
 			// nothing to export
 			if (Length <= 0) {
 				return;
 			}
 
 			this._root = _rootNode;
+			this._exporter = _exporter;
 
 			GLTFAnimation anim = new GLTFAnimation();
 			anim.Name = "Animation Root";
@@ -130,7 +132,7 @@ namespace UnityGLTF {
 				BakeCurveSet(targetCurvesBinding[target], clip.length, BACKING_FRAMERATE, ref times, ref positions, ref rotations, ref scales);
 
 				int channelTargetId = GetTargetIdFromTransform(ref targetTr);
-				AccessorId timeAccessor = ExportAccessor(times);
+				AccessorId timeAccessor = _exporter.ExportAccessor(times);
 
 				// Create channel
 				AnimationChannel Tchannel = new AnimationChannel();
@@ -146,10 +148,9 @@ namespace UnityGLTF {
 
 				AnimationSampler Tsampler = new AnimationSampler();
 				Tsampler.Input = timeAccessor;
-				Tsampler.Output = ExportAccessor(positions, true); // Vec3 for translation
-				Tchannel.Sampler = new AnimationSamplerId {
+				Tsampler.Output = _exporter.ExportAccessor(positions, true); // Vec3 for translation
+				Tchannel.Sampler = new SamplerId {
 					Id = animation.Samplers.Count,
-					GLTFAnimation = animation,
 					Root = _root
 				};
 
@@ -169,10 +170,9 @@ namespace UnityGLTF {
 
 				AnimationSampler Rsampler = new AnimationSampler();
 				Rsampler.Input = timeAccessor; // Float, for time
-				Rsampler.Output = ExportAccessor(rotations, true); // Vec4 for
-				Rchannel.Sampler = new AnimationSamplerId {
+				Rsampler.Output = _exporter.ExportAccessor(rotations, true); // Vec4 for
+				Rchannel.Sampler = new SamplerId {
 					Id = animation.Samplers.Count,
-					GLTFAnimation = animation,
 					Root = _root
 				};
 
@@ -192,10 +192,9 @@ namespace UnityGLTF {
 
 				AnimationSampler Ssampler = new AnimationSampler();
 				Ssampler.Input = timeAccessor; // Float, for time
-				Ssampler.Output = ExportAccessor(scales); // Vec3 for scale
-				Schannel.Sampler = new AnimationSamplerId {
+				Ssampler.Output = _exporter.ExportAccessor(scales); // Vec3 for scale
+				Schannel.Sampler = new SamplerId {
 					Id = animation.Samplers.Count,
-					GLTFAnimation = animation,
 					Root = _root
 				};
 
