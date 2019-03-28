@@ -74,6 +74,8 @@ namespace UnityGLTF
 		private readonly Dictionary<PrimKey, MeshId> _primOwner = new Dictionary<PrimKey, MeshId>();
 		private readonly Dictionary<Mesh, MeshPrimitive[]> _meshToPrims = new Dictionary<Mesh, MeshPrimitive[]>();
 
+		private readonly GLTFAnimationExporter animationExport = new GLTFAnimationExporter();
+
 		// Settings
 		public static bool ExportNames = true;
 		public static bool ExportFullPath = true;
@@ -425,6 +427,9 @@ namespace UnityGLTF
 
 			_root.Scenes.Add(scene);
 
+			// bake in the animations
+			animationExport.ExportAnimations(_root, this);
+
 			return new SceneId
 			{
 				Id = _root.Scenes.Count - 1,
@@ -449,6 +454,9 @@ namespace UnityGLTF
 			}
 
 			node.SetUnityTransform(nodeTransform);
+
+			// add an animation node if it exists
+			animationExport.AddAnimationIfAny(nodeTransform, _root.Nodes.Count);
 
 			var id = new NodeId
 			{
