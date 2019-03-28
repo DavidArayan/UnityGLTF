@@ -48,11 +48,15 @@ namespace UnityGLTF {
 		public int Length { get { return _animationNodes.Count; } }
 
 		public void AddAnimationIfAny(Transform node, int count) {
+			if (node == null) {
+				return;
+			}
+
 			if (node.GetComponent<UnityEngine.Animation>() || node.GetComponent<UnityEngine.Animator>()) {
 				_animationNodes.Add(node);
 			}
 
-			_exportedTransforms.Add(node.GetInstanceID(), _root.Nodes.Count);
+			_exportedTransforms.Add(node.GetInstanceID(), count);
 		}
 
 		public void ExportAnimations(GLTFRoot _rootNode, GLTFSceneExporter _exporter) {
@@ -65,6 +69,8 @@ namespace UnityGLTF {
 			this._exporter = _exporter;
 
 			GLTFAnimation anim = new GLTFAnimation();
+			anim.Samplers = new List<AnimationSampler>();
+			anim.Channels = new List<AnimationChannel>();
 			anim.Name = "Animation Root";
 
 			for (int i = 0; i < _animationNodes.Count; ++i) {
@@ -101,6 +107,10 @@ namespace UnityGLTF {
 		}
 
 		private void ConvertClipToGLTFAnimation(ref AnimationClip clip, ref Transform transform, ref GLTFAnimation animation) {
+			if (animation == null) {
+				Debug.Log("animation null");
+				return;
+			}
 			// Generate GLTF.Schema.AnimationChannel and GLTF.Schema.AnimationSampler
 			// 1 channel per node T/R/S, one sampler per node T/R/S
 			// Need to keep a list of nodes to convert to indexes
