@@ -150,3 +150,13 @@ _pkginfo.txt
 !*.[Cc]ache/
 
 *.orig
+
+# DAVID - LOCAL IGNORES, Don't want to cause problems upstream
+# NOTE : DELETE BEFORE PR REQUEST
+UnityGLTF/Assets/UnityGLTF/Plugins\.meta
+UnityGLTF/Assets/UnityGLTF/Scripts/Tests/Integration\.meta
+UnityGLTF/Assets/UnityGLTF/Scripts/Tests/Editor/Integration\.meta
+UnityGLTF/ProjectSettings/PresetManager\.asset
+UnityGLTF/ProjectSettings/ProjectVersion\.txt
+UnityGLTF/ProjectSettings/VFXManager\.asset
+UnityGLTF/www/glTF-Asset-Generator
