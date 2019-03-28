@@ -70,7 +70,25 @@ namespace UnityGLTF
 			public Mesh Mesh;
 			public Material Material;
 		}
+
+		protected struct AnimKey
+		{
+			public Mesh Mesh;
+			public Animator Animator;
+
+			public bool IsValid 
+			{ 
+				get 
+				{ 
+					return Animator != null &&
+					Animator.runtimeAnimatorController != null &&
+					Animator.runtimeAnimatorController.animationClips.Length > 0;
+				}
+			}
+		}
+
 		private readonly Dictionary<PrimKey, MeshId> _primOwner = new Dictionary<PrimKey, MeshId>();
+		private readonly Dictionary<AnimKey, MeshId> _animOwner = new Dictionary<AnimKey, MeshId>();
 		private readonly Dictionary<Mesh, MeshPrimitive[]> _meshToPrims = new Dictionary<Mesh, MeshPrimitive[]>();
 
 		// Settings
@@ -109,7 +127,8 @@ namespace UnityGLTF
 				Nodes = new List<Node>(),
 				Samplers = new List<Sampler>(),
 				Scenes = new List<GLTFScene>(),
-				Textures = new List<GLTFTexture>()
+				Textures = new List<GLTFTexture>(),
+				Animations = new List<GLTFAnimation>()
 			};
 
 			_imageInfos = new List<ImageInfo>();
