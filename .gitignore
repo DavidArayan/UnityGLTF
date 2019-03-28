@@ -160,3 +160,5 @@ UnityGLTF/ProjectSettings/PresetManager\.asset
 UnityGLTF/ProjectSettings/ProjectVersion\.txt
 UnityGLTF/ProjectSettings/VFXManager\.asset
 UnityGLTF/www/glTF-Asset-Generator
+
+\.DS_Store
