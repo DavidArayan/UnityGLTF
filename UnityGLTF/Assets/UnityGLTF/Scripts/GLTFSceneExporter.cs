@@ -71,24 +71,7 @@ namespace UnityGLTF
 			public Material Material;
 		}
 
-		protected struct AnimKey
-		{
-			public Mesh Mesh;
-			public Animator Animator;
-
-			public bool IsValid 
-			{ 
-				get 
-				{ 
-					return Animator != null &&
-					Animator.runtimeAnimatorController != null &&
-					Animator.runtimeAnimatorController.animationClips.Length > 0;
-				}
-			}
-		}
-
 		private readonly Dictionary<PrimKey, MeshId> _primOwner = new Dictionary<PrimKey, MeshId>();
-		private readonly Dictionary<AnimKey, MeshId> _animOwner = new Dictionary<AnimKey, MeshId>();
 		private readonly Dictionary<Mesh, MeshPrimitive[]> _meshToPrims = new Dictionary<Mesh, MeshPrimitive[]>();
 
 		// Settings
